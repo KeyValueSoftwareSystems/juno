@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    targetCompatibility = org.gradle.api.JavaVersion.VERSION_17
+    sourceCompatibility = org.gradle.api.JavaVersion.VERSION_17
+}
+
+dependencies {
+    implementation 'net.portswigger.burp.extender:burp-extender-api:2.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+}
+
+jar {
+    archiveBaseName = 'keyvalue-jwt-tester'
+    archiveVersion = '1.0'
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
