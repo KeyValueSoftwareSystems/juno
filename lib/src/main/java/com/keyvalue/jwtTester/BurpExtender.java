@@ -1,19 +1,43 @@
 package com.keyvalue.jwtTester;
 
-import java.io.PrintWriter;
+import burp.*;
 
-import burp.IBurpExtender;
-import burp.IBurpExtenderCallbacks;
+public class BurpExtender implements IBurpExtender, IHttpListener, IMessageEditorController {
 
-public class BurpExtender implements IBurpExtender
-{
+    private IBurpExtenderCallbacks callbacks;
+    private IHttpRequestResponse messageInfo;
+    private Tab tab;
+
     @Override
-    public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks)
-    {
-        callbacks.setExtensionName("KeyValue JWT Tester");
+    public void registerExtenderCallbacks(IBurpExtenderCallbacks extenderCallbacks) {
+        callbacks = extenderCallbacks;
 
-        PrintWriter stdout = new PrintWriter(callbacks.getStdout(), true);
+        tab = new Tab(callbacks);
         
-        stdout.println("Hello output");
+        callbacks.setExtensionName(Constants.EXTENTION_NAME);
+        callbacks.registerHttpListener(BurpExtender.this);
+
+        callbacks.customizeUiComponent(tab);
+        callbacks.addSuiteTab(tab);
+    }
+
+    @Override
+    public void processHttpMessage(int toolFlag, boolean messageIsRequest, IHttpRequestResponse httpRequestResponse) {
+        messageInfo = httpRequestResponse;
+    }
+
+    @Override
+    public IHttpService getHttpService() {
+        return messageInfo.getHttpService();
+    }
+
+    @Override
+    public byte[] getRequest() {
+        return messageInfo.getRequest();
+    }
+
+    @Override
+    public byte[] getResponse() {
+        return messageInfo.getResponse();
     }
 }
