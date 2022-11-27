@@ -2,42 +2,39 @@ package com.keyvalue.jwtTester;
 
 import burp.*;
 
-public class BurpExtender implements IBurpExtender, IHttpListener, IMessageEditorController {
-
+public class BurpExtender implements IBurpExtender, IMessageEditorController {
     private IBurpExtenderCallbacks callbacks;
-    private IHttpRequestResponse messageInfo;
+    private IMessageEditor messageEditor;
     private Tab tab;
+    private Menu menu;
 
     @Override
     public void registerExtenderCallbacks(IBurpExtenderCallbacks extenderCallbacks) {
         callbacks = extenderCallbacks;
+        messageEditor = callbacks.createMessageEditor(this, true);
 
-        tab = new Tab(callbacks);
+        tab = new Tab(callbacks, messageEditor);
+        menu = new Menu(messageEditor);
         
         callbacks.setExtensionName(Constants.EXTENTION_NAME);
-        callbacks.registerHttpListener(BurpExtender.this);
 
         callbacks.customizeUiComponent(tab);
         callbacks.addSuiteTab(tab);
-    }
-
-    @Override
-    public void processHttpMessage(int toolFlag, boolean messageIsRequest, IHttpRequestResponse httpRequestResponse) {
-        messageInfo = httpRequestResponse;
+        callbacks.registerContextMenuFactory(menu);
     }
 
     @Override
     public IHttpService getHttpService() {
-        return messageInfo.getHttpService();
+        return null;
     }
 
     @Override
     public byte[] getRequest() {
-        return messageInfo.getRequest();
+        return null;
     }
 
     @Override
     public byte[] getResponse() {
-        return messageInfo.getResponse();
+        return null;
     }
 }
