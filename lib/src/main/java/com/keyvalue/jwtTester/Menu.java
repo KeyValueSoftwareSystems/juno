@@ -3,6 +3,9 @@ package com.keyvalue.jwtTester;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JMenuItem;
 
 import burp.*;
@@ -31,9 +34,9 @@ public class Menu implements IContextMenuFactory {
     }
 
     private void initSendOption() {
-        sendOption.addActionListener(new java.awt.event.ActionListener() {
+        sendOption.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 if (messages.length == 1) {
                     messageEditor.setMessage(messages[0].getRequest(), true);
                 }

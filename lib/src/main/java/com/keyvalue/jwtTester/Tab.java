@@ -1,17 +1,22 @@
 package com.keyvalue.jwtTester;
 
-import javax.swing.*;
-
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.swing.*;
 
 import burp.*;
 
 public class Tab extends JPanel implements ITab {
     private final IBurpExtenderCallbacks callbacks;
-    private final IMessageEditor messageEditor;
+    private final IMessageEditor payloadMessageEditor;
+    private final IMessageEditor requestMessageViewer;
+    private final IMessageEditor responseMessageViewer;
 
     private JButton addPayloadButton;
     private JButton autoPayloadButton;
@@ -31,10 +36,17 @@ public class Tab extends JPanel implements ITab {
     private JTextField threadsField;
     private JLabel threadsLabel;
 
-    public Tab(IBurpExtenderCallbacks extenderCallbacks, IMessageEditor editor) {
+    public Tab(
+        IBurpExtenderCallbacks extenderCallbacks,
+        IMessageEditor editor,
+        IMessageEditor requestViewer,
+        IMessageEditor responseViewer
+    ) {
         callbacks = extenderCallbacks;
-        messageEditor = editor;
-        
+        payloadMessageEditor = editor;
+        requestMessageViewer = requestViewer;
+        responseMessageViewer = responseViewer;
+
         initComponents();
     }
 
@@ -73,7 +85,9 @@ public class Tab extends JPanel implements ITab {
 
     private void initLayout() {
         GroupLayout optionsPanelLayout = new GroupLayout(optionsPanel);
+
         optionsPanel.setLayout(optionsPanelLayout);
+
         optionsPanelLayout.setHorizontalGroup(
             optionsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(optionsPanelLayout.createSequentialGroup()
@@ -110,10 +124,12 @@ public class Tab extends JPanel implements ITab {
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        payloadScrollPane.setViewportView(messageEditor.getComponent());
+        payloadScrollPane.setViewportView(payloadMessageEditor.getComponent());
 
         GroupLayout payloadPanelLayout = new GroupLayout(payloadPanel);
+
         payloadPanel.setLayout(payloadPanelLayout);
+
         payloadPanelLayout.setHorizontalGroup(
             payloadPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(payloadPanelLayout.createSequentialGroup()
@@ -148,7 +164,9 @@ public class Tab extends JPanel implements ITab {
         );
 
         GroupLayout layout = new GroupLayout(this);
-        this.setLayout(layout);
+
+        setLayout(layout);
+
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -198,7 +216,7 @@ public class Tab extends JPanel implements ITab {
     }
 
     private void initMessageEditor() {
-        messageEditor.setMessage("".getBytes(), true);
+        payloadMessageEditor.setMessage("".getBytes(), true);
     }
     
     private void initPayloadLabel() {
@@ -231,8 +249,9 @@ public class Tab extends JPanel implements ITab {
         startAttackButton.setText(Constants.ATTACK_TEXT);
         startAttackButton.addActionListener(new java.awt.event.ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                // TODO - add action
+            public void actionPerformed(ActionEvent evt) {
+                ResultWindow resultWindow = new ResultWindow(callbacks, requestMessageViewer, responseMessageViewer);
+                resultWindow.render();
             }
         });
     }
@@ -240,9 +259,9 @@ public class Tab extends JPanel implements ITab {
     private void initHttpsCheckbox() {
         httpsCheckbox.setText(Constants.HTTPS_TEXT);
         httpsCheckbox.setHorizontalTextPosition(SwingConstants.LEADING);
-        httpsCheckbox.addActionListener(new java.awt.event.ActionListener() {
+        httpsCheckbox.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 // TODO - add action
             }
         });
@@ -251,9 +270,9 @@ public class Tab extends JPanel implements ITab {
     private void initThreadsLabel() {
         threadsLabel.setText(Constants.THREADS_TEXT);
         threadsField.setText("1");
-        threadsField.addActionListener(new java.awt.event.ActionListener() {
+        threadsField.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 // TODO - add action
             }
         });
@@ -266,10 +285,10 @@ public class Tab extends JPanel implements ITab {
 
     private void initAddPayloadButton() {
         addPayloadButton.setText(Constants.ADD_TEXT);
-        addPayloadButton.addActionListener(new java.awt.event.ActionListener() {
+        addPayloadButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                byte[] selectedDataBytes = messageEditor.getSelectedData();
+            public void actionPerformed(ActionEvent evt) {
+                byte[] selectedDataBytes = payloadMessageEditor.getSelectedData();
                 
                 if (selectedDataBytes != null) {
                     String jwtToken = new String(selectedDataBytes);
@@ -282,9 +301,9 @@ public class Tab extends JPanel implements ITab {
 
     private void initClearPayloadButton() {
         clearPayloadButton.setText(Constants.CLEAR_TEXT);
-        clearPayloadButton.addActionListener(new java.awt.event.ActionListener() {
+        clearPayloadButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 tokenField.setText("");
             }
         });
@@ -292,10 +311,10 @@ public class Tab extends JPanel implements ITab {
 
     private void initAutoPayloadButton() {
         autoPayloadButton.setText(Constants.AUTO_TEXT);
-        autoPayloadButton.addActionListener(new java.awt.event.ActionListener() {
+        autoPayloadButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                byte[] messageBytes = messageEditor.getMessage();
+            public void actionPerformed(ActionEvent evt) {
+                byte[] messageBytes = payloadMessageEditor.getMessage();
                 
                 if (messageBytes != null) {
                     String message = new String(messageBytes);
