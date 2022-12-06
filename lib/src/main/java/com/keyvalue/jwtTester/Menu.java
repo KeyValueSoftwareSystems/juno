@@ -25,11 +25,11 @@ public class Menu implements IContextMenuFactory {
         messages = invocation.getSelectedMessages();
         menuItems = new ArrayList<>();
         sendOption = new JMenuItem(Constants.SEND_MESSAGE_TEXT);
-        
+
         initSendOption();
-        
+
         menuItems.add(sendOption);
-        
+
         return menuItems;
     }
 

@@ -23,6 +23,8 @@ public class BurpExtender implements IBurpExtender, IMessageEditorController {
         callbacks.customizeUiComponent(tab);
         callbacks.addSuiteTab(tab);
         callbacks.registerContextMenuFactory(menu);
+
+        tab.render();
     }
 
     @Override
