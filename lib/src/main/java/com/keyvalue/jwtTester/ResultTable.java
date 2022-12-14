@@ -50,6 +50,10 @@ public class ResultTable extends JTable {
         setAutoCreateRowSorter(true);
     }
 
+    /**
+     * The action to perform when individual table rows are selected by the user.
+     * Here it is used to show the request and response for the selected row.
+     */
     @Override
     public void changeSelection(int row, int column, boolean toggle, boolean extend) {
         LogEntry logEntry = logs.get(row);
@@ -61,6 +65,10 @@ public class ResultTable extends JTable {
         super.changeSelection(row, column, toggle, extend);
     }
 
+    /**
+     * Adds a new LogEntry to the result table.
+     * @param logEntry - The LogEntry to add.
+     */
     public synchronized void addDataRow(LogEntry logEntry) {
         logs.add(logEntry);
         data.add(new Object [] {

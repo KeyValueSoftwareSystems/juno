@@ -287,11 +287,12 @@ public class Tab extends JPanel implements ITab {
 
             attacker.startAttack((payload, requestResponse) -> {
                 IResponseInfo responseInfo = callbacks.getHelpers().analyzeResponse(requestResponse.getResponse());
+                int contentLength = requestResponse.getResponse().length - responseInfo.getBodyOffset();
 
                 resultWindow.addDataRow(
                     new LogEntry(
                         responseInfo.getStatusCode(),
-                        requestResponse.getResponse().length - responseInfo.getBodyOffset(),
+                        contentLength,
                         payload,
                         requestResponse
                 ));

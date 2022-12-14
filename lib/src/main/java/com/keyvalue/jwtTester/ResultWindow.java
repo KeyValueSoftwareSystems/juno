@@ -53,21 +53,33 @@ public class ResultWindow extends JFrame implements IMessageEditorController {
         setTitle(Constants.RESULTS_WINDOW_NAME);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
+        initResultLabel();
+        initResultsScrollPane();
+        initTabs();
+        initSplitPane();
+        initLayout();
+    }
+
+    private void initResultLabel() {
         resultsLabel.setFont(new Font(resultsLabel.getFont().getName(), Font.BOLD, 14));
         resultsLabel.setText(Constants.RESULTS_STRING);
+    }
 
+    private void initResultsScrollPane() {
         resultsScrollPane.setViewportView(resultTable);
         requestScrollPane.setViewportView(requestMessageViewer.getComponent());
         responseScrollPane.setViewportView(responseMessageViewer.getComponent());
+    }
 
+    private void initTabs() {
         tabs.addTab(Constants.REQUEST_STRING, requestScrollPane);
         tabs.addTab(Constants.RESPONSE_STRING, responseScrollPane);
+    }
 
+    private void initSplitPane() {
         splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
         splitPane.setLeftComponent(resultsScrollPane);
         splitPane.setRightComponent(tabs);
-
-        initLayout();
     }
 
     private void initLayout() {

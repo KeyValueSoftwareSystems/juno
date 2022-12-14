@@ -28,12 +28,15 @@ public class Menu implements IContextMenuFactory {
     @Override
     public List<JMenuItem> createMenuItems(IContextMenuInvocation invocation) {
         messages = invocation.getSelectedMessages();
-        initSendOption();
+        sendMessageToTab();
 
         return menuItems;
     }
 
-    private void initSendOption() {
+    /**
+     * Sends the current HTTP message to the extension tab.
+     */
+    private void sendMessageToTab() {
         sendOption.addActionListener(evt -> {
             if (messages.length == 1) {
                 baseRequestResponse = messages[0];
