@@ -13,6 +13,7 @@ java {
 
 dependencies {
     implementation 'net.portswigger.burp.extender:burp-extender-api:2.3'
+    implementation 'org.json:json:20220924'
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
