@@ -1,26 +1,28 @@
 package com.keyvalue.jwtTester;
 
-import burp.*;
+import javax.swing.JTextField;
+
+import burp.IBurpExtender;
+import burp.IBurpExtenderCallbacks;
+import burp.IHttpRequestResponse;
+import burp.IHttpService;
+import burp.IMessageEditor;
+import burp.IMessageEditorController;
 
 public class BurpExtender implements IBurpExtender, IMessageEditorController {
-    private IBurpExtenderCallbacks callbacks;
-    private IMessageEditor payloadMessageEditor;
-    private IMessageEditor requestMessageViewer;
-    private IMessageEditor responseMessageViewer;
     private Tab tab;
-    private Menu menu;
+    private JTextField targetField;
+    private IMessageEditor payloadMessageEditor;
+    private IHttpRequestResponse baseRequestResponse;
 
     @Override
-    public void registerExtenderCallbacks(IBurpExtenderCallbacks extenderCallbacks) {
-        callbacks = extenderCallbacks;
+    public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks) {
+        targetField = new JTextField();
         payloadMessageEditor = callbacks.createMessageEditor(this, true);
-        requestMessageViewer = callbacks.createMessageEditor(this, false);
-        responseMessageViewer = callbacks.createMessageEditor(this, false);
-        menu = new Menu(payloadMessageEditor);
-        tab = new Tab(callbacks, payloadMessageEditor, requestMessageViewer, responseMessageViewer);
+        Menu menu = new Menu(payloadMessageEditor, baseRequestResponse, targetField);
+        tab = new Tab(callbacks, payloadMessageEditor, targetField);
 
-        callbacks.setExtensionName(Constants.EXTENTION_NAME);
-        callbacks.customizeUiComponent(tab);
+        callbacks.setExtensionName(Constants.EXTENSION_NAME);
         callbacks.addSuiteTab(tab);
         callbacks.registerContextMenuFactory(menu);
 
@@ -29,16 +31,16 @@ public class BurpExtender implements IBurpExtender, IMessageEditorController {
 
     @Override
     public IHttpService getHttpService() {
-        return null;
+        return baseRequestResponse.getHttpService();
     }
 
     @Override
     public byte[] getRequest() {
-        return null;
+        return baseRequestResponse.getRequest();
     }
 
     @Override
     public byte[] getResponse() {
-        return null;
+        return baseRequestResponse.getResponse();
     }
 }

@@ -1,45 +1,49 @@
 package com.keyvalue.jwtTester;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JMenuItem;
+import javax.swing.JTextField;
 
-import burp.*;
+import burp.IContextMenuFactory;
+import burp.IContextMenuInvocation;
+import burp.IHttpRequestResponse;
+import burp.IMessageEditor;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
 public class Menu implements IContextMenuFactory {
     private final IMessageEditor messageEditor;
+    private final JTextField targetField;
+    private final JMenuItem sendOption = new JMenuItem(Constants.SEND_MESSAGE_STRING);
+    private final List<JMenuItem> menuItems = List.of(sendOption);
 
-    private List<JMenuItem> menuItems;
-    private JMenuItem sendOption;
+    private IHttpRequestResponse baseRequestResponse;
     private IHttpRequestResponse[] messages;
+
+    public Menu(IMessageEditor messageEditor, IHttpRequestResponse baseRequestResponse, JTextField targetField) {
+        this.messageEditor = messageEditor;
+        this.baseRequestResponse = baseRequestResponse;
+        this.targetField = targetField;
+    }
 
     @Override
     public List<JMenuItem> createMenuItems(IContextMenuInvocation invocation) {
         messages = invocation.getSelectedMessages();
-        menuItems = new ArrayList<>();
-        sendOption = new JMenuItem(Constants.SEND_MESSAGE_TEXT);
-
         initSendOption();
-
-        menuItems.add(sendOption);
 
         return menuItems;
     }
 
     private void initSendOption() {
-        sendOption.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                if (messages.length == 1) {
-                    messageEditor.setMessage(messages[0].getRequest(), true);
-                }
+        sendOption.addActionListener(evt -> {
+            if (messages.length == 1) {
+                baseRequestResponse = messages[0];
+                String protocol = baseRequestResponse.getHttpService().getProtocol();
+                String host = baseRequestResponse.getHttpService().getHost();
+                int port = baseRequestResponse.getHttpService().getPort();
+                String target = Utils.generateTarget(protocol, host, port);
+
+                messageEditor.setMessage(baseRequestResponse.getRequest(), true);
+                targetField.setText(target);
             }
         });
     }
