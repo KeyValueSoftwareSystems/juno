@@ -6,3 +6,6 @@ build
 
 # Ignore built classes
 bin
+
+# Ignore IDE generated directory
+.idea
