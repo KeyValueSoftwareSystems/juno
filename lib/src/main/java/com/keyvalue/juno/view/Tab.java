@@ -1,80 +1,91 @@
-package com.keyvalue.jwtTester;
-
-import burp.IBurpExtenderCallbacks;
-import burp.IMessageEditor;
-import burp.IResponseInfo;
-import burp.ITab;
-
-import java.awt.*;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+package com.keyvalue.juno.view;
 
 import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 
-import lombok.RequiredArgsConstructor;
+import com.keyvalue.juno.model.Constants;
+import com.keyvalue.juno.view.button.AddTokenButton;
+import com.keyvalue.juno.view.button.AutoAddTokenButton;
+import com.keyvalue.juno.view.button.ClearTokenButton;
+import com.keyvalue.juno.view.button.StartAttackButton;
+import com.keyvalue.juno.view.editor.BaseRequestMessageEditor;
+import com.keyvalue.juno.view.field.TargetField;
+import com.keyvalue.juno.view.field.ThreadsField;
+import com.keyvalue.juno.view.field.TokenField;
+import com.keyvalue.juno.view.label.OptionsLabel;
+import com.keyvalue.juno.view.label.PayloadLabel;
+import com.keyvalue.juno.view.label.TargetLabel;
+import com.keyvalue.juno.view.label.ThreadsLabel;
+import com.keyvalue.juno.view.label.TokenLabel;
 
-@RequiredArgsConstructor
+import java.awt.Component;
+
+import burp.IBurpExtenderCallbacks;
+import burp.ITab;
+
 public class Tab extends JPanel implements ITab {
     private final IBurpExtenderCallbacks callbacks;
-    private final IMessageEditor payloadMessageEditor;
-    private final JTextField targetField;
-    
-    private JButton addPayloadButton;
-    private JButton autoPayloadButton;
-    private JButton clearPayloadButton;
-    private JSeparator mainSeparator;
-    private JLabel optionsLabel;
+    private final BaseRequestMessageEditor baseRequestMessageEditor;
+    private final TargetField targetField;
+
     private JPanel optionsPanel;
-    private JLabel payloadLabel;
     private JPanel payloadPanel;
+    private JSeparator separator;
     private JScrollPane payloadScrollPane;
-    private JButton startAttackButton;
-    private JLabel targetLabel;
-    private JLabel tokenLabel;
-    private JTextField tokenField;
-    private JTextField threadsField;
-    private JLabel threadsLabel;
-    
-    public void render() {
+    private TokenField tokenField;
+    private ThreadsField threadsField;
+    private AddTokenButton addTokenButton;
+    private ClearTokenButton clearTokenButton;
+    private AutoAddTokenButton autoAddTokenButton;
+    private StartAttackButton startAttackButton;
+    private OptionsLabel optionsLabel;
+    private PayloadLabel payloadLabel;
+    private TargetLabel targetLabel;
+    private TokenLabel tokenLabel;
+    private ThreadsLabel threadsLabel;
+
+    public Tab(
+        IBurpExtenderCallbacks callbacks,
+        BaseRequestMessageEditor baseRequestMessageEditor,
+        TargetField targetField
+    ) {
+        this.callbacks = callbacks;
+        this.baseRequestMessageEditor = baseRequestMessageEditor;
+        this.targetField = targetField;
+        
         initComponents();
+        initLayout();
+    }
+    
+    private void initComponents() {
+        optionsLabel = new OptionsLabel();
+        payloadLabel = new PayloadLabel();
+        targetLabel = new TargetLabel();
+        tokenLabel = new TokenLabel();
+        threadsLabel = new ThreadsLabel();
+        optionsPanel = new JPanel();
+        payloadPanel = new JPanel();
+        separator = new JSeparator();
+        payloadScrollPane = new JScrollPane();
+        tokenField = new TokenField();
+        threadsField = new ThreadsField();
+        clearTokenButton = new ClearTokenButton(tokenField);
+        addTokenButton = new AddTokenButton(baseRequestMessageEditor, tokenField);
+        autoAddTokenButton = new AutoAddTokenButton(baseRequestMessageEditor, tokenField);
+        startAttackButton = new StartAttackButton(callbacks,baseRequestMessageEditor,targetField,tokenField,threadsField);
     }
 
-    private void initComponents() {
-        optionsPanel = new JPanel();
-        optionsLabel = new JLabel();
-        threadsLabel = new JLabel();
-        threadsField = new JTextField();
-        startAttackButton = new JButton();
-        mainSeparator = new JSeparator();
-        payloadPanel = new JPanel();
-        targetLabel = new JLabel();
-        payloadScrollPane = new JScrollPane();
-        tokenLabel = new JLabel();
-        tokenField = new JTextField();
-        payloadLabel = new JLabel();
-        addPayloadButton = new JButton();
-        clearPayloadButton = new JButton();
-        autoPayloadButton = new JButton();
+    @Override
+    public Component getUiComponent() {
+        return this;
+    }
 
-        initMessageEditor();
-        initOptionsLabel();
-        initThreadsLabel();
-        initStartAttackButton();
-        initTargetField();
-        initTokenField();
-        initPayloadLabel();
-        initAddPayloadButton();
-        initClearPayloadButton();
-        initAutoPayloadButton();
-        initLayout();
+    @Override
+    public String getTabCaption() {
+        return Constants.EXTENSION_NAME;
     }
 
     private void initLayout() {
@@ -114,7 +125,7 @@ public class Tab extends JPanel implements ITab {
                     .addComponent(threadsField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
         );
 
-        payloadScrollPane.setViewportView(payloadMessageEditor.getComponent());
+        payloadScrollPane.setViewportView(baseRequestMessageEditor.getMessageEditor().getComponent());
 
         GroupLayout payloadPanelLayout = new GroupLayout(payloadPanel);
 
@@ -165,7 +176,7 @@ public class Tab extends JPanel implements ITab {
                     .addComponent(optionsPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(GroupLayout.Alignment.TRAILING, tabLayout.createSequentialGroup()
                         .addGroup(tabLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                            .addComponent(mainSeparator)
+                            .addComponent(separator)
                             .addGroup(tabLayout.createSequentialGroup()
                                 .addGroup(tabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                     .addComponent(payloadPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -174,9 +185,9 @@ public class Tab extends JPanel implements ITab {
                                         .addComponent(payloadLabel)))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(tabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                    .addComponent(addPayloadButton)
-                                    .addComponent(clearPayloadButton)
-                                    .addComponent(autoPayloadButton))))
+                                    .addComponent(addTokenButton)
+                                    .addComponent(clearTokenButton)
+                                    .addComponent(autoAddTokenButton))))
                         .addGap(8, 8, 8)))
                 .addContainerGap())
         );
@@ -187,7 +198,7 @@ public class Tab extends JPanel implements ITab {
                 .addContainerGap()
                 .addComponent(optionsPanel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mainSeparator, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+                .addComponent(separator, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(tabLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(tabLayout.createSequentialGroup()
@@ -196,117 +207,14 @@ public class Tab extends JPanel implements ITab {
                         .addComponent(payloadPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(tabLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(addPayloadButton)
+                        .addComponent(addTokenButton)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(clearPayloadButton)
+                        .addComponent(clearTokenButton)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(autoPayloadButton)))
+                        .addComponent(autoAddTokenButton)))
                 .addContainerGap())
         );
 
         callbacks.customizeUiComponent(this);
-    }
-
-    private void initMessageEditor() {
-        payloadMessageEditor.setMessage("".getBytes(), true);
-    }
-    
-    private void initPayloadLabel() {
-        payloadLabel.setFont(new Font(payloadLabel.getFont().getName(), Font.BOLD, 14));
-        payloadLabel.setText(Constants.PAYLOAD_STRING);
-    }
-
-    private void initTargetField() {
-        targetLabel.setText(Constants.TARGET_STRING);
-        targetField.setText(Constants.DEFAULT_TARGET_STRING);
-    }
-
-    private void initTokenField() {
-        tokenLabel.setText(Constants.TOKEN_STRING);
-        tokenField.setEditable(false);
-    }
-
-    private void initThreadsLabel() {
-        threadsLabel.setText(Constants.THREADS_STRING);
-        threadsField.setText("1");
-    }
-    
-    private void initOptionsLabel() {
-        optionsLabel.setFont(new Font(optionsLabel.getFont().getName(), Font.BOLD, 14));
-        optionsLabel.setText(Constants.OPTIONS_STRING);
-    }
-
-    private void initAddPayloadButton() {
-        addPayloadButton.setText(Constants.ADD_STRING);
-        addPayloadButton.addActionListener(evt -> {
-            byte[] selectedDataBytes = payloadMessageEditor.getSelectedData();
-
-            if (selectedDataBytes != null) {
-                String jwtToken = new String(selectedDataBytes);
-
-                tokenField.setText(jwtToken);
-            }
-        });
-    }
-
-    private void initClearPayloadButton() {
-        clearPayloadButton.setText(Constants.CLEAR_STRING);
-        clearPayloadButton.addActionListener(evt -> tokenField.setText(""));
-    }
-
-    private void initAutoPayloadButton() {
-        autoPayloadButton.setText(Constants.AUTO_STRING);
-        autoPayloadButton.addActionListener(evt -> {
-            byte[] messageBytes = payloadMessageEditor.getMessage();
-
-            if (messageBytes != null) {
-                String message = new String(messageBytes);
-                Pattern pattern = Pattern.compile(Constants.JWT_REGEX);
-                Matcher match = pattern.matcher(message);
-
-                if (match.find()) {
-                    tokenField.setText(match.group(0));
-                }
-            }
-        });
-    }
-
-    private void initStartAttackButton() {
-        startAttackButton.setText(Constants.ATTACK_STRING);
-        startAttackButton.addActionListener(evt -> {
-            ResultWindow resultWindow = new ResultWindow(callbacks);
-            Attacker attacker = new Attacker(
-                callbacks,
-                targetField.getText(),
-                payloadMessageEditor.getMessage(),
-                tokenField.getText(),
-                Integer.parseInt(threadsField.getText())
-            );
-
-            resultWindow.render();
-
-            attacker.startAttack((payload, requestResponse) -> {
-                IResponseInfo responseInfo = callbacks.getHelpers().analyzeResponse(requestResponse.getResponse());
-                int contentLength = requestResponse.getResponse().length - responseInfo.getBodyOffset();
-
-                resultWindow.addDataRow(
-                    new LogEntry(
-                        responseInfo.getStatusCode(),
-                        contentLength,
-                        payload,
-                        requestResponse
-                ));
-            });
-        });
-    }
-
-    @Override
-    public String getTabCaption() {
-        return Constants.EXTENSION_NAME;
-    }
-
-    @Override
-    public Component getUiComponent() {
-        return this;
     }
 }

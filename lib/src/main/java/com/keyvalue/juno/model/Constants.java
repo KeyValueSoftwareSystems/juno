@@ -1,9 +1,11 @@
-package com.keyvalue.jwtTester;
+package com.keyvalue.juno.model;
 
 import java.util.List;
 
+import com.keyvalue.juno.controller.Utils;
+
 public class Constants {
-    public static final String EXTENSION_NAME = "JWT Tester";
+    public static final String EXTENSION_NAME = "Juno";
     public static final String ADD_STRING = "Add §";
     public static final String CLEAR_STRING = "Clear §";
     public static final String AUTO_STRING = "Auto §";

@@ -1,4 +1,4 @@
-## JWT Tester
+## Juno
 
 A Burpsuite extension that can test for JWT based security vulnerabilities.
 
@@ -20,6 +20,6 @@ Requirements:
 Steps:
 
 1. `git clone`
-2. `cd jwt-tester`
+2. `cd juno`
 3. `./gradlew build`
 4. Add the `.jar` file (located in `./lib/build/libs`) to burp extensions.

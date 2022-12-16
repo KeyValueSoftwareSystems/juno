@@ -20,7 +20,7 @@ dependencies {
 }
 
 jar {
-    archiveBaseName = 'keyvalue-jwt-tester'
+    archiveBaseName = 'juno'
     archiveVersion = '1.0'
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
     from {

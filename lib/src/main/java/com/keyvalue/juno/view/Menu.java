@@ -1,26 +1,29 @@
-package com.keyvalue.jwtTester;
+package com.keyvalue.juno.view;
 
 import java.util.List;
 
 import javax.swing.JMenuItem;
-import javax.swing.JTextField;
+
+import com.keyvalue.juno.controller.Utils;
+import com.keyvalue.juno.model.Constants;
+import com.keyvalue.juno.view.editor.BaseRequestMessageEditor;
+import com.keyvalue.juno.view.field.TargetField;
 
 import burp.IContextMenuFactory;
 import burp.IContextMenuInvocation;
 import burp.IHttpRequestResponse;
-import burp.IMessageEditor;
 
 public class Menu implements IContextMenuFactory {
-    private final IMessageEditor messageEditor;
-    private final JTextField targetField;
+    private final BaseRequestMessageEditor baseRequestMessageEditor;
+    private final TargetField targetField;
     private final JMenuItem sendOption = new JMenuItem(Constants.SEND_MESSAGE_STRING);
     private final List<JMenuItem> menuItems = List.of(sendOption);
 
     private IHttpRequestResponse baseRequestResponse;
     private IHttpRequestResponse[] messages;
 
-    public Menu(IMessageEditor messageEditor, IHttpRequestResponse baseRequestResponse, JTextField targetField) {
-        this.messageEditor = messageEditor;
+    public Menu(BaseRequestMessageEditor baseRequestMessageEditor, IHttpRequestResponse baseRequestResponse, TargetField targetField) {
+        this.baseRequestMessageEditor = baseRequestMessageEditor;
         this.baseRequestResponse = baseRequestResponse;
         this.targetField = targetField;
     }
@@ -45,8 +48,8 @@ public class Menu implements IContextMenuFactory {
                 int port = baseRequestResponse.getHttpService().getPort();
                 String target = Utils.generateTarget(protocol, host, port);
 
-                messageEditor.setMessage(baseRequestResponse.getRequest(), true);
                 targetField.setText(target);
+                baseRequestMessageEditor.getMessageEditor().setMessage(baseRequestResponse.getRequest(), true);
             }
         });
     }

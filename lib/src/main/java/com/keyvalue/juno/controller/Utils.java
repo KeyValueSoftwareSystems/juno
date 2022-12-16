@@ -1,4 +1,4 @@
-package com.keyvalue.jwtTester;
+package com.keyvalue.juno.controller;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -9,6 +9,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.json.JSONObject;
+
+import com.keyvalue.juno.model.Constants;
 
 public class Utils {
     public static List<String> generateCasePermutations(String input) {
@@ -62,7 +64,7 @@ public class Utils {
         targetMap.put(Constants.PROTOCOL_STRING, protocol);
         targetMap.put(Constants.HOST_STRING, host);
         targetMap.put(Constants.PORT_STRING, port);
-        
+
         return targetMap;
     }
 

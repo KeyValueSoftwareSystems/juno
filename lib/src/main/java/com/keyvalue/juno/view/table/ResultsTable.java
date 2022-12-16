@@ -1,4 +1,4 @@
-package com.keyvalue.jwtTester;
+package com.keyvalue.juno.view.table;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,12 +6,16 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import burp.IHttpRequestResponse;
-import burp.IMessageEditor;
+import com.keyvalue.juno.model.Constants;
+import com.keyvalue.juno.model.LogEntry;
+import com.keyvalue.juno.view.editor.PayloadRequestMessageEditor;
+import com.keyvalue.juno.view.editor.PayloadResponseMessageEditor;
 
-public class ResultTable extends JTable {
-    private final IMessageEditor requestMessageViewer;
-    private final IMessageEditor responseMessageViewer;
+import burp.IHttpRequestResponse;
+
+public class ResultsTable extends JTable {
+    private final PayloadRequestMessageEditor payloadRequestMessageEditor;
+    private final PayloadResponseMessageEditor payloadResponseMessageEditor;
     private final List<Object[]> data = new ArrayList<>();
     private final List<LogEntry> logs = new ArrayList<>();
 
@@ -42,9 +46,12 @@ public class ResultTable extends JTable {
         }
     };
 
-    public ResultTable(IMessageEditor requestMessageViewer, IMessageEditor responseMessageViewer) {
-        this.requestMessageViewer = requestMessageViewer;
-        this.responseMessageViewer = responseMessageViewer;
+    public ResultsTable(
+        PayloadRequestMessageEditor payloadRequestMessageEditor,
+        PayloadResponseMessageEditor payloadResponseMessageEditor
+    ) {
+        this.payloadRequestMessageEditor = payloadRequestMessageEditor;
+        this.payloadResponseMessageEditor = payloadResponseMessageEditor;
 
         setModel(tableModel);
         setAutoCreateRowSorter(true);
@@ -59,8 +66,8 @@ public class ResultTable extends JTable {
         LogEntry logEntry = logs.get(row);
         IHttpRequestResponse selectedMessage = logEntry.requestResponse();
 
-        requestMessageViewer.setMessage(selectedMessage.getRequest(), true);
-        responseMessageViewer.setMessage(selectedMessage.getResponse(), false);
+        payloadRequestMessageEditor.getMessageEditor().setMessage(selectedMessage.getRequest(), true);
+        payloadResponseMessageEditor.getMessageEditor().setMessage(selectedMessage.getResponse(), false);
 
         super.changeSelection(row, column, toggle, extend);
     }

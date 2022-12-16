@@ -1,4 +1,4 @@
-package com.keyvalue.jwtTester;
+package com.keyvalue.juno.model;
 
 import burp.IHttpRequestResponse;
 
