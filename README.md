@@ -23,12 +23,12 @@ Performs JWT ```alg:none``` attacks quickly and easily.
 ## Quick start
 1. Pick a request with a JWT in it.
 
-![image](https://user-images.githubusercontent.com/60728930/208425523-cf5fe796-c88a-413c-996c-95410f956f39.png)
+![image](https://user-images.githubusercontent.com/60728930/208624128-35f03906-f88d-40fd-991b-1aa9b0f8839c.png)
 
 2. Send it to <b>Juno</b>.
 3. Click on <b>Auto §</b>
 
-![image](https://user-images.githubusercontent.com/60728930/208426308-87e47ac4-76d0-4797-8427-b562e92a3468.png)
+![image](https://user-images.githubusercontent.com/60728930/208624811-c2c5780a-e483-48f8-9f74-9255feaff153.png)
 
 4. Click on <b>Start attack</b> to launch the attack & hope for the best!
 
@@ -37,12 +37,11 @@ Performs JWT ```alg:none``` attacks quickly and easily.
 ## Additional options
 + If needed, <b>Add §</b> and <b>Clear§</b> can be used to manually select the JWT token and clear the selection respectively.
 
-![image](https://user-images.githubusercontent.com/60728930/208585519-ad5218f0-7888-41a3-ad1c-918d1df9af94.png)
+![image](https://user-images.githubusercontent.com/60728930/208625665-1255aaa0-8c3e-4dd2-9c26-b3d91e773908.png)
 
-+ If time is of the essence, increase the number of threads for a faster execution.
++ If time is of the essence, increase the number of threads for faster execution.
 
-![image](https://user-images.githubusercontent.com/60728930/208585359-c0c5b39a-659d-4c87-b9ff-3a2665bcf129.png)
-
+![image](https://user-images.githubusercontent.com/60728930/208625489-f70a0952-6bff-4aff-9282-fa443ad47294.png)
 
 ## How it works
 1. Obtain a certain JWT
