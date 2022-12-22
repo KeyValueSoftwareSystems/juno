@@ -1,5 +1,19 @@
-# Juno
-Performs JWT ```alg:none``` attacks quickly and easily.
+# What
+Juno is a burp extension to attack JWT tokens quickly and easily.
+
+# Why
+JWTs have a signature which can be verified server-side, rending forging impractical.
+However, a JWT has the signature verification algorithm specified in itself, in the header section.
+A vulnerable server tends to accept 'none' as a valid option and hence bypass signature verification.
+
+# How
+1. Obtain a certain JWT
+2. Split the JWT</li>
+3. Decode the header section of the JWT (base64 decode)</li>
+4. Replace the ```alg```  parameter value with ```none``` , ```None``` , ```NONE``` and so on.
+5. Encode the header section back (base64 encode)
+6. Rejoin the JWT
+7. Send a request with the forged token
 
 ## Building
 
@@ -7,18 +21,22 @@ Performs JWT ```alg:none``` attacks quickly and easily.
 + JDK 17+
 
 ### Steps
-1. git clone
-2. cd juno
-3. ./gradlew build
-4. The target jar file can be found in located in ```./lib/build/libs```
+```bash
+git clone
+cd juno
+./gradlew build
+```
+The target jar file can be found in located in ```./lib/build/libs```
 
 
 ## Installation in Burp
-1. Follow these steps to install an extension from a JAR file:
-2. Go to <b>Extensions</b> > <b>Installed</b> and click Add.
-3. Under <b>Extension Details</b>, click <b>Select file</b> and locate the downloaded ```jar``` file.</li>
-4. Click Next.</li>
-5. Wait for the extension to install. Notice that the extension is now listed in the <b>Installed</b> tab.</li>
+Follow these steps to install an extension from a JAR file:
+<pre>
+1. Go to <b>Extensions</b> > <b>Installed</b> and click Add.
+2. Under <b>Extension Details</b>, click <b>Select file</b> and locate the downloaded ```jar``` file.</li>
+3. Click Next.</li>
+4. Wait for the extension to install. Notice that the extension is now listed in the <b>Installed</b> tab.</li>
+</pre>
 
 ## Quick start
 1. Pick a request with a JWT in it.
@@ -43,14 +61,8 @@ Performs JWT ```alg:none``` attacks quickly and easily.
 
 ![image](https://user-images.githubusercontent.com/60728930/208625489-f70a0952-6bff-4aff-9282-fa443ad47294.png)
 
-## How it works
-1. Obtain a certain JWT
-2. Split the JWT</li>
-3. Decode the header section of the JWT (base64 decode)</li>
-4. Replace the ```alg```  parameter value with ```none``` , ```None``` , ```NONE``` and so on.
-5. Encode the header section back (base64 encode)
-6. Rejoin the JWT
-7. Send a request with the forged token
+## Licence
+
 
 ## References
 Installing extensions : <a href="https://portswigger.net/burp/documentation/desktop/extensions/installing-extensions">Portswigger</a>
