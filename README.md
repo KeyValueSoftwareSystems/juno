@@ -4,7 +4,7 @@ Juno is a burp extension to attack JWT tokens quickly and easily.
 # Why
 JWTs have a signature which can be verified server-side, rending forging impractical.
 However, a JWT has the signature verification algorithm specified in itself, in the header section.
-A vulnerable server tends to accept 'none' as a valid option and hence bypass signature verification.
+A vulnerable server tends to accept ```none``` as a valid option and hence bypass signature verification.
 
 # How
 1. Obtain a certain JWT
@@ -22,7 +22,7 @@ A vulnerable server tends to accept 'none' as a valid option and hence bypass si
 
 ### Steps
 ```bash
-git clone
+git clone https://github.com/KeyValueSoftwareSystems/juno.git
 cd juno
 ./gradlew build
 ```
@@ -62,7 +62,7 @@ Follow these steps to install an extension from a JAR file:
 ![image](https://user-images.githubusercontent.com/60728930/208625489-f70a0952-6bff-4aff-9282-fa443ad47294.png)
 
 ## Licence
-
+GNU General Public License v3.0
 
 ## References
 Installing extensions : <a href="https://portswigger.net/burp/documentation/desktop/extensions/installing-extensions">Portswigger</a>
