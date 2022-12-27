@@ -41,7 +41,7 @@ cd juno
 The target jar file can be found in located in ```./lib/build/libs```
 
 
-# Installation in Burp
+# Burp installation
 Follow these steps to install an extension from a JAR file:
 <pre>
 1. Go to <b>Extensions</b> > <b>Installed</b> and click Add.
