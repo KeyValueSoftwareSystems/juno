@@ -62,7 +62,7 @@ Follow these steps to install an extension from a JAR file:
 ![image](https://user-images.githubusercontent.com/60728930/208625489-f70a0952-6bff-4aff-9282-fa443ad47294.png)
 
 ## Licence
-This project is licenced under the terms of the GNU General Public License v3.0.
+This project is licenced under the terms of the GNU General Public License v3.0, as mentioned in the COPYING file in the root directory.
 
 ## References
 Installing extensions : <a href="https://portswigger.net/burp/documentation/desktop/extensions/installing-extensions">Portswigger</a>
