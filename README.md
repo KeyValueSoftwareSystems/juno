@@ -1,6 +1,18 @@
 # What
 Juno is a burp extension to attack JWT tokens quickly and easily.
 
+# Table of contents:
++ <a href=https://github.com/KeyValueSoftwareSystems/juno#Why>Why</a>
++ <a href=https://github.com/KeyValueSoftwareSystems/juno#how>How</a>
++ <a href=https://github.com/KeyValueSoftwareSystems/juno#building>Building</a>
+  + <a href=https://github.com/KeyValueSoftwareSystems/juno#requirements>Requirements</a>
+  + <a href=https://github.com/KeyValueSoftwareSystems/juno#steps>Steps</a>
+  + <a href=https://github.com/KeyValueSoftwareSystems/juno#burp-installation>Burp installation</a>
++ <a href=https://github.com/KeyValueSoftwareSystems/juno#quick-start>Quick start</a>
++ <a href=https://github.com/KeyValueSoftwareSystems/juno#additional-options>Additional options</a>
++ <a href=https://github.com/KeyValueSoftwareSystems/juno#licence>Licence</a>
++ <a href=https://github.com/KeyValueSoftwareSystems/juno#references>References</a>
+
 # Why
 JWTs have a signature which can be verified server-side, rendering forging impractical.
 However, a JWT has the signature verification algorithm specified in its header section.
@@ -15,12 +27,12 @@ A vulnerable server tends to accept ```none``` as a valid option and hence bypas
 6. Rejoin the JWT
 7. Send a request with the forged token
 
-## Building
+# Building
 
-### Requirements
+## Requirements
 + JDK 17+
 
-### Steps
+## Steps
 ```bash
 git clone https://github.com/KeyValueSoftwareSystems/juno.git
 cd juno
@@ -29,7 +41,7 @@ cd juno
 The target jar file can be found in located in ```./lib/build/libs```
 
 
-## Installation in Burp
+# Installation in Burp
 Follow these steps to install an extension from a JAR file:
 <pre>
 1. Go to <b>Extensions</b> > <b>Installed</b> and click Add.
@@ -38,7 +50,7 @@ Follow these steps to install an extension from a JAR file:
 4. Wait for the extension to install. Notice that the extension is now listed in the <b>Installed</b> tab.</li>
 </pre>
 
-## Quick start
+# Quick start
 1. Pick a request with a JWT in it.
 
 ![image](https://user-images.githubusercontent.com/60728930/208624128-35f03906-f88d-40fd-991b-1aa9b0f8839c.png)
@@ -61,8 +73,8 @@ Follow these steps to install an extension from a JAR file:
 
 ![image](https://user-images.githubusercontent.com/60728930/208625489-f70a0952-6bff-4aff-9282-fa443ad47294.png)
 
-## Licence
+# Licence
 This project is licensed under the terms of the GNU General Public Licence v3.0, as mentioned in the ```COPYING``` file in the root directory.
 
-## References
+# References
 Installing extensions : <a href="https://portswigger.net/burp/documentation/desktop/extensions/installing-extensions">Portswigger</a>
