@@ -20,6 +20,7 @@ A vulnerable server tends to accept ```none``` as a valid option and hence bypas
 
 # How
 To check whether APIs on <i>vulnerable.com</i> are vulnerable to the above attack, one would have to
+
 0. Log into vulernable.com
 1. Extract the JWT
 2. Split the JWT
