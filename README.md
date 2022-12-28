@@ -19,9 +19,9 @@ However, a JWT has the signature verification algorithm specified in its header 
 A vulnerable server tends to accept ```none``` as a valid option and hence bypass signature verification.
 
 # How
-To check whether APIs on <i>vulnerable.com</i> are vulnerable to the above attack, one would have to
+To check whether APIs on <i>vulnerable.com</i> are vulnerable to the above attack, one would have to:
 
-0. Log into vulernable.com
+0. Log in to vulnerable.com
 1. Extract the JWT
 2. Split the JWT
 3. Decode the header section of the JWT (base64 decode)
@@ -32,7 +32,7 @@ To check whether APIs on <i>vulnerable.com</i> are vulnerable to the above attac
 8. See if it was successful
 9. Repeat steps 5 through 7 with ```None```, ```NONE```, ```nONE``` and so on.
 
-Juno performs everthing above (except step 0) for you.
+Juno performs everything above (except step 0) for you.
 
 # Building
 
@@ -84,4 +84,6 @@ Follow these steps to install an extension from a JAR file:
 This project is licensed under the terms of the GNU General Public Licence v3.0, as mentioned in the ```COPYING``` file in the root directory.
 
 # References
-Installing extensions : <a href="https://portswigger.net/burp/documentation/desktop/extensions/installing-extensions">Portswigger</a>
+
++ JSON Web Tokens (JWTs): <a href="https://jwt.io/introduction/">jwt.io</a>
++ Installing extensions: <a href="https://portswigger.net/burp/documentation/desktop/extensions/installing-extensions">Portswigger</a>
