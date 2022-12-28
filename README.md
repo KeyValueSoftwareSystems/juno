@@ -19,13 +19,19 @@ However, a JWT has the signature verification algorithm specified in its header 
 A vulnerable server tends to accept ```none``` as a valid option and hence bypass signature verification.
 
 # How
-1. Obtain the JWT
+To check whether APIs on <i>vulnerable.com</i> are vulnerable to the above attack, one would have to
+0. Log into vulernable.com
+1. Extract the JWT
 2. Split the JWT
 3. Decode the header section of the JWT (base64 decode)
-4. Replace the ```alg```  parameter value with ```none``` , ```None``` , ```NONE``` and so on.
+4. Replace the ```alg```  parameter value with ```none```
 5. Encode the header section back (base64 encode)
 6. Rejoin the JWT
 7. Send a request with the forged token
+8. See if it was successful
+9. Repeat steps 5 through 7 with ```None```, ```NONE```, ```nONE``` and so on.
+
+Juno performs everthing above (except step 0) for you.
 
 # Building
 
