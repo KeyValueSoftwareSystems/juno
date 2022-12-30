@@ -1,3 +1,4 @@
+<img src="https://img.shields.io/badge/Licence-Apache 2.0-blue"></img>
 # What
 Juno is a burp extension to attack JWT tokens quickly and easily.
 
@@ -14,8 +15,8 @@ Juno is a burp extension to attack JWT tokens quickly and easily.
 + <a href=https://github.com/KeyValueSoftwareSystems/juno#references>References</a>
 
 # Why
-JWTs have a signature which can be verified server-side, rendering forging impractical.
-However, a JWT has the signature verification algorithm specified in its header section.
+JWTs have a signature which can be verified server-side, rendering forging a JWT impractical.
+However, a JWT has the signature verification algorithm specified in its own header section.
 A vulnerable server tends to accept ```none``` as a valid option and hence bypass signature verification.
 
 # How
@@ -24,15 +25,15 @@ To check whether APIs on <i>vulnerable.com</i> are vulnerable to the above attac
 0. Log in to vulnerable.com
 1. Extract the JWT
 2. Split the JWT
-3. Decode the header section of the JWT (base64 decode)
+3. Decode the header section of the JWT (_base64 decode_)
 4. Replace the ```alg```  parameter value with ```none```
-5. Encode the header section back (base64 encode)
+5. Encode the header section back (_base64 encode_)
 6. Rejoin the JWT
 7. Send a request with the forged token
 8. See if it was successful
 9. Repeat steps 5 through 7 with ```None```, ```NONE```, ```nONE``` and so on.
 
-Juno performs everything above (except step 0) for you.
+**Juno** performs everything above (_except step 0_) for you.
 
 # Building
 
@@ -45,16 +46,16 @@ git clone https://github.com/KeyValueSoftwareSystems/juno.git
 cd juno
 ./gradlew build
 ```
-The target jar file can be found in located in ```./lib/build/libs```
+The target jar file can be located in ```./lib/build/libs```
 
 
-# Burp installation
-Follow these steps to install an extension from a JAR file:
+# Installation
+Follow these steps to install Juno from a JAR file onto Burp suite:
 <pre>
 1. Go to <b>Extensions</b> > <b>Installed</b> and click Add.
-2. Under <b>Extension Details</b>, click <b>Select file</b> and locate the downloaded ```jar``` file.</li>
+2. Under <b>Extension Details</b>, click <b>Select file</b> and locate the ```jar``` file.
 3. Click Next.</li>
-4. Wait for the extension to install. Notice that the extension is now listed in the <b>Installed</b> tab.</li>
+4. Wait for the extension to install. Notice that the extension is now listed in the <b>Installed</b> tab.
 </pre>
 
 # Quick start
@@ -81,7 +82,7 @@ Follow these steps to install an extension from a JAR file:
 ![image](https://user-images.githubusercontent.com/60728930/208625489-f70a0952-6bff-4aff-9282-fa443ad47294.png)
 
 # Licence
-This project is licensed under the terms of the GNU General Public Licence v3.0, as mentioned in the ```COPYING``` file in the root directory.
+This project is licensed under the terms of the **Apache Licence 2.0**, as mentioned in the ```COPYING``` file in the root directory.
 
 # References
 
