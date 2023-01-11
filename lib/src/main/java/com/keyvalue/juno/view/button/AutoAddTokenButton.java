@@ -1,11 +1,9 @@
 package com.keyvalue.juno.view.button;
 
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
+import com.keyvalue.juno.controller.Utils;
 import com.keyvalue.juno.model.Constants;
 import com.keyvalue.juno.view.editor.BaseRequestMessageEditor;
 
@@ -18,11 +16,10 @@ public class AutoAddTokenButton extends JButton {
 
             if (messageBytes != null) {
                 String message = new String(messageBytes);
-                Pattern pattern = Pattern.compile(Constants.JWT_REGEX);
-                Matcher match = pattern.matcher(message);
+                String extractedJWT = Utils.extractJWT(message);
 
-                if (match.find()) {
-                    tokenField.setText(match.group(0));
+                if (extractedJWT != null) {
+                    tokenField.setText(extractedJWT);
                 }
             }
         });

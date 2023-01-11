@@ -45,10 +45,10 @@ public class Menu implements IContextMenuFactory {
                 baseRequestResponse = messages[0];
                 String protocol = baseRequestResponse.getHttpService().getProtocol();
                 String host = baseRequestResponse.getHttpService().getHost();
-                int port = baseRequestResponse.getHttpService().getPort();
-                String target = Utils.generateTarget(protocol, host, port);
+                Integer port = baseRequestResponse.getHttpService().getPort();
+                String targetAddress = Utils.generateWebAddress(protocol, host, port);
 
-                targetField.setText(target);
+                targetField.setText(targetAddress);
                 baseRequestMessageEditor.getMessageEditor().setMessage(baseRequestResponse.getRequest(), true);
             }
         });

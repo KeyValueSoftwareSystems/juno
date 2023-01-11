@@ -2,9 +2,10 @@ package com.keyvalue.juno.view.button;
 
 import javax.swing.JButton;
 
-import com.keyvalue.juno.controller.Attacker;
+import com.keyvalue.juno.controller.NoneAlgorithmAttacker;
 import com.keyvalue.juno.model.Constants;
 import com.keyvalue.juno.model.LogEntry;
+import com.keyvalue.juno.model.Target;
 import com.keyvalue.juno.view.ResultWindow;
 import com.keyvalue.juno.view.editor.BaseRequestMessageEditor;
 import com.keyvalue.juno.view.field.TargetField;
@@ -26,11 +27,15 @@ public class StartAttackButton extends JButton {
 
         addActionListener(evt -> {
             ResultWindow resultWindow = new ResultWindow(callbacks);
-            Attacker attacker = new Attacker(
+            Target target = new Target(
                 callbacks,
                 targetField.getText(),
                 baseRequestMessageEditor.getMessageEditor().getMessage(),
-                tokenField.getText(),
+                tokenField.getText()
+            );
+            NoneAlgorithmAttacker attacker = new NoneAlgorithmAttacker(
+                callbacks,
+                target,
                 Integer.parseInt(threadsField.getText())
             );
 
