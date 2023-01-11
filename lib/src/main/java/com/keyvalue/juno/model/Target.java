@@ -1,6 +1,5 @@
 package com.keyvalue.juno.model;
 
-
 import java.io.IOException;
 
 import com.keyvalue.juno.controller.Utils;
@@ -44,7 +43,7 @@ public class Target {
             String[] nextSplit = firstSplit[1].split(":");
             String protocol = firstSplit[0];
             String host = nextSplit[0];
-            Integer port;
+            int port;
 
             if (nextSplit.length == 2) {
                 port = Integer.parseInt(nextSplit[1]);

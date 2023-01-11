@@ -16,10 +16,10 @@ public class AutoAddTokenButton extends JButton {
 
             if (messageBytes != null) {
                 String message = new String(messageBytes);
-                String matchedJWT = Utils.grepJWT(message);
+                String extractedJWT = Utils.extractJWT(message);
 
-                if (matchedJWT != null) {
-                    tokenField.setText(matchedJWT);
+                if (extractedJWT != null) {
+                    tokenField.setText(extractedJWT);
                 }
             }
         });

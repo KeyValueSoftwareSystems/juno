@@ -1,13 +1,9 @@
 package com.keyvalue.juno.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 
 import com.keyvalue.juno.model.Constants;
 
@@ -52,32 +48,7 @@ public class Utils {
     }
 
     /**
-     * Given a JWT string, a word-list, and a generatorFunction,
-     * this method uses them to generate the JWTs to be used as attacking payloads.
-     * @param jwt - The original JWT.
-     * @param wordList - The word-list to be used for modifying the JWT.
-     * @param generatorFunction - The function that specifies the payload generation logic.
-     * It should always return the generated payload.
-     * @return - The payload map.
-     */
-    public static HashMap<String, String> generatePayloadMap(
-        String jwt,
-        List<String> wordList,
-        BiFunction<String, String, String> generatorFunction
-    ) throws IOException {
-        String matchedJWT = grepJWT(jwt);
-        HashMap<String, String> payloadMap = new HashMap<>();
-
-        if (matchedJWT != null) {
-            wordList.forEach(word -> payloadMap.put(word, generatorFunction.apply(jwt, word)));
-            return payloadMap;
-        }
-
-        throw new IOException(Constants.INVALID_JWT_EXCEPTION_MESSAGE);
-    }
-
-    /**
-     * Given a protocol, host and port, this method returns the curresponding web address.
+     * Given a protocol, host and port, this method returns the corresponding web address.
      * @param protocol - Protocol string. Example: "https".
      * @param host - Host string. Example: "example.com".
      * @param port - Port number. Example: 443.
@@ -100,7 +71,7 @@ public class Utils {
      * @param string - The string to check.
      * @return - The match.
      */
-    public static String grepJWT(String string) {
+    public static String extractJWT(String string) {
         Pattern pattern = Pattern.compile(Constants.JWT_REGEX);
         Matcher match = pattern.matcher(string);
 
