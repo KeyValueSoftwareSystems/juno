@@ -21,7 +21,7 @@ dependencies {
 
 jar {
     archiveBaseName = 'juno'
-    archiveVersion = '1.0'
+    archiveVersion = 'v1.0'
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
