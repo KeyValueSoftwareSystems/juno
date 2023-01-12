@@ -1,0 +1,45 @@
+name: Publish release
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+
+jobs:
+  publish-release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'corretto'
+
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: build
+
+    - name: Get build info
+      run: |
+        BUILD_DIR=./lib/build/libs
+        ARTIFACT_NAME=$(ls $BUILD_DIR)
+        TAG_NAME=$(echo $ARTIFACT_NAME | grep -oP '^.*v[\d]\.[\d]')
+        TAG_VERSION=$(echo $TAG_NAME | grep -o 'v.*')
+        echo "BUILD_DIR=$BUILD_DIR" >> $GITHUB_ENV
+        echo "ARTIFACT_NAME=$ARTIFACT_NAME" >> $GITHUB_ENV
+        echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+        echo "TAG_VERSION=$TAG_VERSION" >> $GITHUB_ENV
+
+    - name: Publish release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ env.TAG_NAME }}
+        name: Juno ${{ env.TAG_VERSION }}
+        files: ${{ env.BUILD_DIR }}/${{ env.ARTIFACT_NAME }}
+        body_path: ./CHANGELOG.md
